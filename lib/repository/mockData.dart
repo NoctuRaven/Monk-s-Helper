@@ -12,9 +12,7 @@ class MockData {
       qtdR: 10,
       goal: 100,
       acc: 0,
-      percentBar: 0,
-      percentValue: 0,
-      rgb: Rgb(r: 0, g: 2018, b: 7),
+      rgb: Rgb(r: 0, g: 201, b: 7),
     ),
     Mantra(
       id: 2,
@@ -25,8 +23,6 @@ class MockData {
       qtdR: 10,
       goal: 100,
       acc: 0,
-      percentBar: 0,
-      percentValue: 0,
       rgb: Rgb(r: 255, g: 3, b: 3),
     ),
     Mantra(
@@ -38,8 +34,6 @@ class MockData {
       qtdR: 10,
       goal: 100,
       acc: 0,
-      percentBar: 0,
-      percentValue: 0,
       rgb: Rgb(r: 236, g: 255, b: 3),
     ),
     Mantra(
@@ -51,8 +45,6 @@ class MockData {
       qtdR: 10,
       goal: 100,
       acc: 0,
-      percentBar: 0,
-      percentValue: 0,
       rgb: Rgb(r: 3, g: 3, b: 255),
     ),
     Mantra(
@@ -64,8 +56,6 @@ class MockData {
       qtdR: 10,
       goal: 10000,
       acc: 0,
-      percentBar: 0,
-      percentValue: 0,
       rgb: Rgb(r: 255, g: 255, b: 255),
     ),
     Mantra(
@@ -77,8 +67,6 @@ class MockData {
       qtdR: 10,
       goal: 10000,
       acc: 0,
-      percentBar: 0,
-      percentValue: 0,
       rgb: Rgb(r: 212, g: 0, b: 254),
     ),
   ];

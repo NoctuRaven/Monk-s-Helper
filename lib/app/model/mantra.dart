@@ -12,8 +12,7 @@ class Mantra {
   int? goal;
   int? acc;
   Rgb? rgb;
-  double? percentBar;
-  double? percentValue;
+  bool? fulfill;
   Mantra({
     this.id,
     this.name,
@@ -24,8 +23,7 @@ class Mantra {
     this.goal,
     this.acc,
     this.rgb,
-    this.percentBar,
-    this.percentValue,
+    this.fulfill,
   });
 
   Map<String, dynamic> toMap() {
@@ -39,12 +37,11 @@ class Mantra {
       'goal': goal,
       'acc': acc,
       'rgb': rgb?.toMap(),
-      'percentBar': percentBar,
-      'percentValue': percentValue,
+      'fulfill': fulfill,
     };
   }
 
-  factory Mantra.fromMap(Map<String, dynamic> map) {
+  factory Mantra.fromMap(Map<String, dynamic> map, Rgb rgbG) {
     return Mantra(
       id: map['id']?.toInt(),
       name: map['name'],
@@ -54,15 +51,12 @@ class Mantra {
       qtdR: map['qtdR']?.toInt(),
       goal: map['goal']?.toInt(),
       acc: map['acc']?.toInt(),
-      rgb: map['rgb'] != null ? Rgb.fromMap(map['rgb']) : null,
-      percentBar: map['percentBar']?.toDouble(),
-      percentValue: map['percentValue']?.toDouble(),
+      rgb: map['rgb'] != null ? rgbG : null,
+      fulfill: map['fulfill'],
     );
   }
 
   String toJson() => json.encode(toMap());
-
-  factory Mantra.fromJson(String source) => Mantra.fromMap(json.decode(source));
 
   Mantra copyWith({
     int? id,
@@ -74,8 +68,7 @@ class Mantra {
     int? goal,
     int? acc,
     Rgb? rgb,
-    double? percentBar,
-    double? percentValue,
+    bool? fulfill,
   }) {
     return Mantra(
       id: id ?? this.id,
@@ -87,8 +80,7 @@ class Mantra {
       goal: goal ?? this.goal,
       acc: acc ?? this.acc,
       rgb: rgb ?? this.rgb,
-      percentBar: percentBar ?? this.percentBar,
-      percentValue: percentValue ?? this.percentValue,
+      fulfill: fulfill ?? this.fulfill,
     );
   }
 }

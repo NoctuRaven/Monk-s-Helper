@@ -16,13 +16,15 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final formKey = GlobalKey<FormState>();
+  final formKeyBottom = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     TextTheme appTheme = AppTheme.mainThemeText;
     HomeController controller = context.watch<HomeController>();
+    controller.getDatabase();
     if (controller.mantra == null) {
-      controller.mantra = controller.mantraList[0];
+      controller.mantra = controller.mantraList![0];
     }
     _dialog() {
       showDialog(
@@ -490,12 +492,12 @@ class _HomeViewState extends State<HomeView> {
                         height: MediaQuery.of(context).size.height * 0.7,
                       ),
                       child: ListView.builder(
-                          itemCount: controller.mantraList.length,
+                          itemCount: controller.mantraList!.length,
                           itemBuilder: (context, index) {
                             return Observer(builder: (_) {
                               return RadioListTile(
-                                title: Text(controller.mantraList[index].name!),
-                                value: controller.mantraList[index],
+                                title: Text(controller.mantraList![index].name!),
+                                value: controller.mantraList![index],
                                 activeColor: Colors.indigo,
                                 groupValue: controller.mantra,
                                 onChanged: (value) {

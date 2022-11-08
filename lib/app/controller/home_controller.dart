@@ -1,6 +1,8 @@
 import 'package:mobx/mobx.dart';
 import 'package:monks_helper/app/model/rgb.dart';
 import 'package:monks_helper/repository/mockData.dart';
+import 'package:monks_helper/repository/sqlite_connection.dart';
+import 'package:sqflite/sqflite.dart';
 import '../model/mantra.dart';
 
 part 'home_controller.g.dart';
@@ -8,7 +10,9 @@ part 'home_controller.g.dart';
 class HomeController = _HomeControllerBase with _$HomeController;
 
 abstract class _HomeControllerBase with Store {
-  ObservableList<Mantra> mantraList = MockData.mantraList.asObservable();
+  ObservableList<Mantra>? mantraList = MockData.mantraList.asObservable();
+  List<Rgb>? colorsList;
+  Database? _db;
 
   Mantra? addingMantra = Mantra(
     id: 1,
@@ -36,6 +40,38 @@ abstract class _HomeControllerBase with Store {
 
   @observable
   int counter = 0;
+
+  @action
+  getDatabase() async {
+    generateDatabaseRgb().then((value) {
+      colorsList = value;
+    }).then((_) async {
+      mantraList = await generateDatabaseMantra();
+    });
+  }
+
+  Future<ObservableList<Mantra>> generateDatabaseMantra() async {
+    _db = await SQLConnection.getConnection();
+    List<Map<String, dynamic>> resultMantraList = await _db!.query('Mantra');
+
+    ObservableList<Mantra>? mantraListGen = List.generate(resultMantraList.length, (index) {
+      var mantraMap = resultMantraList[index];
+      Rgb rgb = colorsList!.firstWhere((color) => color.id == mantraMap['rgb']);
+      return Mantra.fromMap(mantraMap, rgb);
+    }).asObservable();
+
+    return mantraListGen;
+  }
+
+  Future<List<Rgb>> generateDatabaseRgb() async {
+    _db = await SQLConnection.getConnection();
+    List<Map<String, dynamic>> resultRgbList = await _db!.query('Rgb');
+    List<Rgb>? rgbListGen = List.generate(resultRgbList.length, (index) {
+      var rgbMap = resultRgbList[index];
+      return Rgb.fromMap(rgbMap);
+    });
+    return rgbListGen;
+  }
 
   @action
   getPercent() {
@@ -90,7 +126,7 @@ abstract class _HomeControllerBase with Store {
 
   @action
   addMantra(Mantra newMantra) {
-    mantraList.add(
+    mantraList!.add(
       Mantra().copyWith(
         id: newMantra.id,
         buddhaName: newMantra.buddhaName,
@@ -101,16 +137,14 @@ abstract class _HomeControllerBase with Store {
         rgb: newMantra.rgb,
         acc: newMantra.acc,
         symbol: newMantra.symbol,
-        percentBar: newMantra.percentBar,
-        percentValue: newMantra.percentValue,
       ),
     );
   }
 
   @action
   updateMantra(Mantra newMantra) {
-    int index = mantraList.indexOf(mantraList.firstWhere((element) => element.id == newMantra.id));
-    mantraList[index] = Mantra().copyWith(
+    int index = mantraList!.indexOf(mantraList!.firstWhere((element) => element.id == newMantra.id));
+    mantraList![index] = Mantra().copyWith(
       id: newMantra.id,
       buddhaName: newMantra.buddhaName,
       goal: newMantra.goal,
@@ -120,8 +154,6 @@ abstract class _HomeControllerBase with Store {
       rgb: newMantra.rgb,
       acc: newMantra.acc,
       symbol: newMantra.symbol,
-      percentBar: newMantra.percentBar,
-      percentValue: newMantra.percentValue,
     );
 
     // mantraList[index] = newMantra;
@@ -129,7 +161,7 @@ abstract class _HomeControllerBase with Store {
 
   @action
   deleteMantra(Mantra newMantra) {
-    int index = mantraList.indexOf(mantraList.firstWhere((element) => element.id == newMantra.id));
-    mantraList.removeAt(index);
+    int index = mantraList!.indexOf(mantraList!.firstWhere((element) => element.id == newMantra.id));
+    mantraList!.removeAt(index);
   }
 }
